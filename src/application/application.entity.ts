@@ -1,4 +1,5 @@
 // src/classes/entities/application.entity.ts
+import { Class } from 'src/classes/class.entity';
 import { Sport } from 'src/sport/sport.entity';
 import { User } from 'src/users/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
@@ -19,9 +20,9 @@ export class Application {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Sport, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => Class, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn({ name: 'class_id' })
-  class: Sport;
+  class: Class;
 
   @Column({ type: 'enum', enum: ApplicationStatus, default: ApplicationStatus.PENDING })
   status: ApplicationStatus;

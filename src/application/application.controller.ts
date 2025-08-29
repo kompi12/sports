@@ -12,12 +12,24 @@ import { ApplicationStatus } from './application.entity';
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('applications')
 export class ApplicationController {
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(private readonly applicationService: ApplicationService) { }
 
-  @Post(':classId')
+  @Post(':className')
   @Roles('user')
-  apply(@Param('classId') classId: string, @Body('userId') userId: string) {
-    return this.applicationService.apply(userId, classId);
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['userId'],
+      properties: {
+        userId: { type: 'string' },
+      },
+    },
+  })
+  apply(
+    @Param('className') className: string,
+    @Body('userId') userId: string,
+  ) {
+    return this.applicationService.apply(userId, className);
   }
 
   @Get(':classId')

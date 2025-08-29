@@ -3,7 +3,6 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Application, ApplicationStatus } from './application.entity';
-import { Sport } from 'src/sport/sport.entity';
 import { User } from 'src/users/user.entity';
 import { Class } from 'src/classes/class.entity';
 
@@ -21,15 +20,15 @@ export class ApplicationService {
     private readonly userRepository: Repository<User>, 
   ) {}
 
-  async apply(userId: string, classId: string) {
+  async apply(userId: string, className: string) {
     const user = await this.userRepository.findOneBy({ id: userId });
     if (!user) throw new NotFoundException('User not found');
 
-    const cls = await this.classRepository.findOneBy({ id: classId });
+    const cls = await this.classRepository.findOneBy({ title: className });
     if (!cls) throw new NotFoundException('Class not found');
 
     // Prevent duplicate application
-    const existing = await this.applicationRepository.findOne({ where: { user: { id: userId }, class: { id: classId } } });
+    const existing = await this.applicationRepository.findOne({ where: { user: { id: userId }, class: { id: cls.id } } });
     if (existing) throw new BadRequestException('Already applied for this class');
 
     const application = this.applicationRepository.create({
