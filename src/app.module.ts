@@ -7,6 +7,8 @@ import { UsersService } from './users/users.service';
 import { SportModule } from './sport/sport.module';
 import { ClassScheduleModule } from './class-schedule/class-schedule.module';
 import { ApplicationModule } from './application/application.module';
+import { SeedService } from './seed/seed/seed.service';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -26,7 +28,9 @@ import { ApplicationModule } from './application/application.module';
     SportModule,
     ClassScheduleModule,
     ApplicationModule,
+    SeedModule
   ],
+
 })
 export class AppModule implements OnModuleInit {
   constructor(private readonly usersService: UsersService) {}
