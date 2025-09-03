@@ -1,4 +1,3 @@
-// src/seed/seed.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -39,9 +38,9 @@ await this.userRepository.query('TRUNCATE TABLE "user" CASCADE');
 
 
     const users = await this.userRepository.save([
-      { email: 'admin@gmail.com', password: 'password', role: 'admin' },
-      { email: 'user1@gmail.com', password: 'password', role: 'user' },
-      { email: 'user2@gmail.com', password: 'password', role: 'user' },
+      { email: 'admin@gmail.com', password: '$2b$10$7VgIFdIMWDwKLizluTuAhOx.07hi8YaUXc0pFoVsHA8V1UQYVy.Xe', role: 'admin' }, // password is password
+      { email: 'user1@gmail.com', password: '$2b$10$7VgIFdIMWDwKLizluTuAhOx.07hi8YaUXc0pFoVsHA8V1UQYVy.Xe', role: 'user' },  // password is password
+      { email: 'user2@gmail.com', password: '$2b$10$7VgIFdIMWDwKLizluTuAhOx.07hi8YaUXc0pFoVsHA8V1UQYVy.Xe', role: 'user' },  // password is password
     ]);
 
     const sports = await this.sportRepository.save([

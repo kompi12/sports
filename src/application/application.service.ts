@@ -20,11 +20,11 @@ export class ApplicationService {
     private readonly userRepository: Repository<User>, 
   ) {}
 
-  async apply(userId: string, className: string) {
+  async apply(userId: string, classId: string) {
     const user = await this.userRepository.findOneBy({ id: userId });
     if (!user) throw new NotFoundException('User not found');
 
-    const cls = await this.classRepository.findOneBy({ title: className });
+    const cls = await this.classRepository.findOneBy({ id: classId });
     if (!cls) throw new NotFoundException('Class not found');
 
     // Prevent duplicate application

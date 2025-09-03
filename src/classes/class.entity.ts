@@ -1,4 +1,3 @@
-// src/classes/entities/class.entity.ts
 import { Sport } from 'src/sport/sport.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 

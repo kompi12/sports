@@ -1,4 +1,3 @@
-// src/classes/entities/class-schedule.entity.ts
 import { Class } from 'src/classes/class.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 

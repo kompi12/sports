@@ -1,9 +1,11 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
-import { ApiTags, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
-@ApiTags('auth') // Groups endpoints under "auth" in Swagger
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -12,31 +14,16 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        email: { type: 'string', example: 'user@example.com' },
-        password: { type: 'string', example: '123456' },
-      },
-    },
-  })
-  async register(@Body() body: { email: string; password: string }) {
-    return this.usersService.create(body.email, body.password);
+  @ApiCreatedResponse({ description: 'User registered successfully.' })
+  async register(@Body() dto: RegisterDto) {
+    return this.usersService.create(dto.email, dto.password);
   }
 
   @Post('login')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        email: { type: 'string', example: 'user@example.com' },
-        password: { type: 'string', example: '123456' },
-      },
-    },
-  })
-  async login(@Body() body: { email: string; password: string }) {
-    const user = await this.authService.validateUser(body.email, body.password);
+  @ApiCreatedResponse({ description: 'User logged in successfully.' })
+  @ApiUnauthorizedResponse({ description: 'Invalid email or password.' })
+  async login(@Body() dto: LoginDto) {
+    const user = await this.authService.validateUser(dto.email, dto.password);
     return this.authService.login(user);
   }
 }

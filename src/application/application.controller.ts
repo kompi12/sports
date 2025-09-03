@@ -4,8 +4,10 @@ import { ApplicationService } from './application.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
-import { ApiBearerAuth, ApiTags, ApiBody } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiBody, ApiBadRequestResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import { ApplicationStatus } from './application.entity';
+import { ApplyDto } from './dto/apply.dto';
+import { UpdateApplicationStatusDto } from './dto/update-application-status.dto';
 
 @ApiTags('applications')
 @ApiBearerAuth()
@@ -14,7 +16,7 @@ import { ApplicationStatus } from './application.entity';
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) { }
 
-  @Post(':className')
+  @Post(':classId')
   @Roles('user')
   @ApiBody({
     schema: {
@@ -25,15 +27,22 @@ export class ApplicationController {
       },
     },
   })
-  apply(
-    @Param('className') className: string,
-    @Body('userId') userId: string,
-  ) {
-    return this.applicationService.apply(userId, className);
-  }
+  @ApiCreatedResponse({ description: 'Application submitted successfully.' })
+  @ApiNotFoundResponse({ description: 'Class or user not found.' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized – invalid or missing JWT' })
+  @ApiForbiddenResponse({ description: 'Forbidden – requires user role' })
+  @ApiBadRequestResponse({ description: 'Invalid request payload' })
+  apply(@Param('classId') classId: string, @Body() dto: ApplyDto) {
+  return this.applicationService.apply(dto.userId, classId);
+}
 
-  @Get(':classId')
+  @Get(':class/classId')
   @Roles('admin')
+  @Roles('admin')
+  @ApiOkResponse({ description: 'Applications retrieved successfully.' })
+  @ApiNotFoundResponse({ description: 'Class not found or has no applications.' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden – requires admin role' })
   findByClass(@Param('classId') classId: string) {
     return this.applicationService.findByClass(classId);
   }
@@ -49,7 +58,12 @@ export class ApplicationController {
       },
     },
   })
-  updateStatus(@Param('applicationId') applicationId: string, @Body('status') status: ApplicationStatus) {
-    return this.applicationService.updateStatus(applicationId, status);
-  }
+  @ApiOkResponse({ description: 'Application status updated successfully.' })
+  @ApiNotFoundResponse({ description: 'Application not found.' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden – requires admin role' })
+  @ApiBadRequestResponse({ description: 'Invalid status provided.' })
+updateStatus(@Param('applicationId') applicationId: string, @Body() dto: UpdateApplicationStatusDto) {
+  return this.applicationService.updateStatus(applicationId, dto.status);
+}
 }

@@ -1,4 +1,3 @@
-// src/classes/class-schedule.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,10 +13,10 @@ export class ClassScheduleService {
     private readonly classRepository: Repository<Class>,
   ) {}
 
-  async create(className: string, scheduleData: Partial<ClassSchedule>) {
-    const cls = await this.classRepository.findOneBy({ title: className });
+  async create(classId: string, scheduleData: Partial<ClassSchedule>) {
+    const cls = await this.classRepository.findOneBy({ id: classId });
     if (!cls) {
-      throw new NotFoundException(`Class with name ${className} not found`);
+      throw new NotFoundException(`Class with id ${classId} not found`);
     }
 
     const schedule = this.scheduleRepository.create({
@@ -32,12 +31,14 @@ export class ClassScheduleService {
     return this.scheduleRepository.find({ relations: ['class'] });
   }
 
-  async findByClass(className: string) {
-    return this.scheduleRepository.find({
-      where: { class: { title: className } },
-      relations: ['class'],
-    });
-  }
+ async findByClass(classId: string) {
+  return this.scheduleRepository.find({
+    where: { class: { id: classId } },
+    relations: ['class'],
+  });
+}
+
+
 
   async remove(scheduleId: string) {
     const schedule = await this.scheduleRepository.findOneBy({ id: scheduleId });
