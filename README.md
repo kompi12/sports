@@ -10,9 +10,7 @@ Users can browse and apply for classes, while admins can manage schedules, updat
 ###  Users
 - Register and log in with email & password
 - Browse and filter sports classes  
-  - Example: `/api/classes?sports=Basketball,Football`
 - View details of each class (schedule, duration, description)  
-  - Example: `/api/classes/{id}`
 - Apply for classes
 
 ### Admins
@@ -26,18 +24,9 @@ Users can browse and apply for classes, while admins can manage schedules, updat
 
 ---
 
-##  Tech Stack
-
-- **Backend:** <Nest.js>  
-- **Database:** <PostgreSQL >  
-- **Authentication:** <JWT >  
-- **API Docs:** Swagger 
-
----
-
-## 🚀 Installation & Setup
+##  Installation & Setup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/sports-complex.git
-   cd sports-complex
+   git clone https://github.com/kompi12/sports.git
+   cd sports
